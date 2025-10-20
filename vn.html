@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chúc Mừng Ngày Phụ Nữ Việt Nam 20/10</title>
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- existing styles (kept & slightly adjusted) --- */
+        body {
+            background-color: #ffebee;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            /* để petals không gây scroll */
+        }
+
+        #book-container {
+            position: relative;
+            width: 80vw;
+            height: 80vh;
+            overflow: hidden;
+            filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.3)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+            z-index: 5;
+            /* sách nằm trên petals nhưng dưới một số control nếu cần */
+        }
+
+        #book {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #book .stf__wrapper {
+            overflow: hidden;
+            position: relative;
+            z-index: -1 !important;
+        }
+
+        #spine {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 3px;
+            height: 98%;
+            /* thấp hơn 100% để không bị tràn bo góc */
+            background: linear-gradient(to right, #fef0de 0%, #ffe5d2 50%, #dfdfdf 100%);
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            /* thấp hơn trang để hiệu ứng lật đè lên */
+            opacity: 0.7;
+            box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+        }
+
+
+        @media (max-width: 767px) {
+            #spine {
+                display: none;
+            }
+        }
+
+        .page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background-color: #fffaf0;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            padding: 30px 20px;
+            margin: 0;
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background: url('https://img.icons8.com/color/96/000000/cherry-blossom.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .page::after {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            background: url('https://png.pngtree.com/png-vector/20231018/ourmid/pngtree-spring-floral-wedding-bouquet-png-image_10206345.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            z-index: 7;
+            position: relative;
+        }
+
+        .cover-page {
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+            position: relative;
+        }
+
+        .cover-page .page-content {
+            gap: 20px;
+        }
+
+        .cover-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8em;
+            letter-spacing: 1px;
+            color: #d94c4c;
+            text-align: center;
+        }
+
+        .cover-subtitle {
+            font-size: 28px;
+            color: #ff69b4;
+            text-align: center;
+            font-style: italic;
+            margin: 0;
+            z-index: 8;
+        }
+
+        .cover-flowers {
+            width: 300px;
+            height: 300px;
+            background: url("https://i.ibb.co/Jw62DYH9/pngtree-colorful-bouquet-of-flowers-with-leaves-and-other-elements-png-image-17247102-removebg-previ.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.9;
+            z-index: 100 !important;
+        }
+
+        .birthday-cover {
+            background: linear-gradient(135deg, #fff4e6 0%, #ffe4d4 100%);
+            position: relative;
+        }
+
+        .birthday-cover::after {
+            background: url('https://img.icons8.com/color/96/000000/birthday-cake.png');
+        }
+
+        .birthday-cover .page-content {
+            gap: 20px;
+        }
+
+        .birthday-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8em;
+            color: #d94c4c;
+            text-align: center;
+        }
+
+        
+
+        .birthday-subtitle {
+            font-size: 32px;
+            color: #ff8c42;
+            text-align: center;
+            font-style: italic;
+            margin: 0;
+            z-index: 8;
+            font-weight: bold;
+        }
+
+        .birthday-cake {
+            width: 280px;
+            height: 500px;
+            object-fit: contain;
+            opacity: 0.95;
+            z-index: 8;
+            border: none !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+        }
+
+        @media (max-width: 767px) {
+
+            .cover-title,
+            .birthday-title {
+                font-size: 32px;
+            }
+
+            .cover-subtitle {
+                font-size: 20px;
+            }
+
+            .birthday-subtitle {
+                font-size: 24px;
+            }
+
+            .cover-flowers,
+            .birthday-cake {
+                width: 200px;
+                height: 200px;
+            }
+
+            .page img {
+                min-width: 150px;
+                max-width: 300px;
+                min-height: 150px;
+                max-height: 300px;
+            }
+        }
+
+        .page img {
+            width: 80%;
+            min-width: 200px;
+            max-width: 400px;
+            min-height: 200px;
+            max-height: 500px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 15px;
+            border: none;
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.15),
+                0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .page p {
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0 15px;
+            font-style: italic;
+            color: #d63384;
+            font-weight: 500;
+        }
+
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 40px;
+            color: #ff69b4;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            z-index: 9;
+        }
+
+        .nav-button:hover {
+            opacity: 1;
+        }
+
+        #prev {
+            left: 20px;
+        }
+
+        #next {
+            right: 20px;
+        }
+
+        .flower-decoration {
+            position: absolute;
+            opacity: 0.1;
+            pointer-events: none;
+            font-size: 3em;
+        }
+
+        .flower-top-left {
+            top: 10px;
+            left: 10px;
+        }
+
+        /* --- petals container --- */
+        .petals {
+            pointer-events: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 20;
+            /* lên trên book để rơi qua sách */
+        }
+
+        .petal {
+            position: absolute;
+            top: -10vh;
+            will-change: transform, opacity;
+            user-select: none;
+            font-size: 24px;
+            /* default, JS sẽ điều chỉnh */
+            opacity: 0.95;
+            transform-origin: center;
+        }
+
+        /* animation: rơi + sway + rotate */
+        @keyframes fall {
+            0% {
+                transform: translate3d(0, -10vh, 0) rotate(0deg);
+                opacity: 1;
+            }
+
+            30% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate3d(20vw, 110vh, 0) rotate(540deg);
+                opacity: 0.95;
+            }
+        }
+
+        /* alternate sway for variety */
+        @keyframes fall-left {
+            0% {
+                transform: translate3d(0, -10vh, 0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate3d(-20vw, 110vh, 0) rotate(-540deg);
+                opacity: 0.95;
+            }
+        }
+
+        /* small blur to simulate depth (applied by JS when needed) */
+        .depth-blur {
+            filter: blur(0.4px);
+        }
+
+        /* responsive small z-index adjustments for mobile */
+        @media (max-width: 767px) {
+            .petals {
+                z-index: 10;
+            }
+
+            #book-container {
+                z-index: 5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="book-container">
+        <div id="book">
+            <!-- Trang bìa Ngày Phụ Nữ -->
+            <div class="page cover-page">
+                <div class="page-content">
+                    <h1 class="cover-title">Chúc Mừng<br>Ngày Phụ Nữ Việt Nam<br>20 - 10</h1>
+                    <div class="cover-flowers"></div>
+                </div>
+            </div>
+
+            <!-- Trang bìa Sinh Nhật -->
+            <div class="page birthday-cover">
+                <div class="page-content">
+                    <h1 class="birthday-title">Chúc Mừng<br>Sinh Nhật Mệ</h1>
+                    <img src="https://i.ibb.co/pj45S13w/pngtree-birthday-strawberry-mango-cake-png-image-4483456-removebg-preview.png"
+                        alt="Bánh sinh nhật" class="birthday-cake" style="border: none; box-shadow: none; margin: 0;">
+
+                </div>
+            </div>
+
+            <!-- Các trang động sẽ được tạo bởi script -->
+        </div>
+
+    </div>
+
+    <button id="prev" class="nav-button">&larr;</button>
+    <button id="next" class="nav-button">&rarr;</button>
+
+    <!-- Petals container -->
+    <div class="petals" id="petals"></div>
+
+    <!-- Hidden container to instantiate YouTube iframe API player -->
+    <div id="yt-player-wrap" style="width:0;height:0;overflow:hidden;position:fixed;left:-9999px;top:-9999px"
+        aria-hidden="true">
+        <div id="yt-player"></div>
+    </div>
+
+    <script>
+        // ---------------------------
+        // tạo pages từ pagesData (giữ nguyên)
+        // ---------------------------
+        const pagesData = [{ img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/480770036_661185536330779_1981207662997881124_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGv736S-pYq1Ip-CdVp9KYD-vLF2SKDQbT68sXZIoNBtALN7YnVNA9YuK3XXocv-tCGgT21qajHq1Wfn-RpWWj1&_nc_ohc=YXuZmRqflp4Q7kNvwFQv_jE&_nc_oc=Adk0WAClxpqI81qKXhnDiprX7ShdubibUJXg2ZGacdViDIIusGXBhm_BdKG4RvSH2x0&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=TiRof05xZN6eJzu1-KqqiA&oh=00_Afc1lZZN4BOGcZIgJkhRrhE3fkCasQhorggs0Ey_kAoe-w&oe=68FBD33D", text: "Chúc Mệ, Mẹ, Dì, Mợ có một ngày 20/10 thật vui vẻ và hạnh phúc!" }, { img: "https://i.ibb.co/s9L20yPR/87c21652-3e67-48f5-91d9-44a05d0706be.jpg", text: "Chúc mọi nguời phụ nữ Việt Nam luôn xinh đẹp và mạnh khỏe!" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/481468363_666630862452913_2181063273656107396_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGO1kEEYm9hBE5DmMduOEih0FDzfk5ISHrQUPN-TkhIerI4mDDBIsClXa5lKYVS25vGUPzkrBUYuNoLZgMSBcfh&_nc_ohc=puUq0AVis00Q7kNvwH_eWfY&_nc_oc=Admg-d5LiZdUk3UiwIf-vDrghN2-L2WwIJjvZLNRpToZs73JOhcpTUrRyA09cEMYYs0&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=LbVUEVzgbur0au3CEJi_Ow&oh=00_Aff6H8qztepugGDk3BamrQykjwNnum-D7fWVjvXi_W6VzQ&oe=68FBAF8D", text: "Chúc Mệ sinh nhật vui vẻ, luôn mạnh khỏe (để có tiền cho cháu ^^)" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/481184527_666631499119516_2322259453961524211_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHJh6VgEQor3l-JmMacXP70wwdPIe_S6LjDB08h79LouMtSBluPP-5aadg_znEBf3q-SBcCDzwoHsSoDJvU1drZ&_nc_ohc=gRsesOOHcKsQ7kNvwHQ6Isj&_nc_oc=Adniy8Wa3A5new6Guokb_sz3olYFzCBIryMk1gPzgkdpgFiRzODNxElb22v2oafvggk&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=jcQhq5pUpZfsi-BUjxcyog&oh=00_AffauyP3GiqNnXFy-aFRjF0YV3_syra9USqO1CZ5u6bk3g&oe=68FBCAB1", text: "Mẹ ơi, mẹ phải luôn vui vẻ và hạnh phúc như này nhé!" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/480677004_661183296331003_8826329685554075040_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGUIxW76Y79fB89U6uqSikDdGyWjb2l56B0bJaNvaXnoG9Dr3rJqpDIjrZ33PqRF_xvd9u63QVvfZ-ptkS5SDF-&_nc_ohc=e02XHQquWgEQ7kNvwGCDqxk&_nc_oc=AdlCj7b0JKryFnFNcNLQsFZqjicC05Ta7C-bVTaflgIxXrcdqwJfff8rZmnJXbG_3hE&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=IBChBlvDRFF-LszNp91ghA&oh=00_AfdSTrHvPzF7-X-eisRxQVjfEORwYFekhRgSJ_ZPIccfPg&oe=68FBDA19", text: "Tuổi mới mong Mệ bớt lo toan, muộn phiền!" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/481008167_661182926331040_1285158571255309426_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHK0TgiFgyiZgPmKj3a9StXhvXjnkp5U3mG9eOeSnlTefWM_iXB9viUvWzx7rm911t_hS2SpmQ4sTiNU9qcHrzP&_nc_ohc=uf7wtipyQDgQ7kNvwEI9eBR&_nc_oc=AdmqACA4lJvF3RClhtwGqY0hVJRw7Mq35GjJFCWIXDUKXjkZZiYXGxinBCBLZHm81p0&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=raCqV4p1kielM5e_QtmdMg&oh=00_Aff9FE_kWjjh8zgqI-jSufUDKXntFRRBadKV41pq-VLEDw&oe=68FBBB52", text: "Ba mẹ phải luôn hạnh phúc vầy nha!!!" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/491835041_9232816563513968_1280410439696787787_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeE0Wu8MPsW15cNIFoVPx4sZmr-qpBZDh22av6qkFkOHbcklFnvjkvChLZufzt7rKVSSGqx06nTcvAZPlyqxTAHp&_nc_ohc=5uuVOxUmiYQQ7kNvwGMviiJ&_nc_oc=AdlEsMTPGsWJPVvMofrZxtiTOjimXNNDEyjKl4QxZs5e3Lsou4G5zV-MdSkR3KcWXSk&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=Bky5EcQO30B9aqoiI4NAcQ&oh=00_AfcKRSmlJZ1Rc12-2DAAlVLeFLz_7P2C3Hgg_e42Q3Fagw&oe=68FBBDAF", text: "Nhà Cậu Mợ cũng phải thật hạnh phúc nha!!!" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/428601181_1063247981566713_7745210842347010680_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeH9KQ9menPqKpwE1O-D5NAub_tPdPDCmJ1v-0908MKYnV38OYzXs1K_zvZXwDhevRqxxGAy2yMBvhYQoIsuSubI&_nc_ohc=3dcZn4x0vmgQ7kNvwFdrc0T&_nc_oc=AdlbQKskb2DWyOGJzFgfJ5RKjzmjhc3j8kOzls6YK44_4cfFu89lxnNIeyiJJwY1weU&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=Lf_ksng7Vex0P1JjSUTm8g&oh=00_Afepf8OVUjNCjLyH9qjafGpHaXwyp4UUmjaUdn_6GfxRtA&oe=68FBB91C", text: "Chúc Dì 20/10 vui vẻ và luôn xinh đẹp (khi nào cháu về, Dì mang lươn vào cho cháu nha ^^)!" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/489457537_9186771401451818_3651179699616015204_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFBxTtgttaa10vj86V0mUfEp8lTin0RR5GnyVOKfRFHkUcigHgsQB264PKhf_3rs3LWeJst0zaIMng9mglikPc-&_nc_ohc=vA4I83mX5coQ7kNvwH50Rzl&_nc_oc=AdlTJ0K00z-RuzpFFgVnGiWG2hoX567oodFd4qBxKEix5RA10kchVQnQ1FRhjMhnFdE&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=WxmrIUm9No3c_eKjRfPLwg&oh=00_AfcBFzpG-AiD5Lv0AmVVgVsmiF2h0WoH7py3q_KvpiSMeg&oe=68FBC617", text: "❤️❤️❤️" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/490068007_9186771161451842_9195095113707589216_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHVYqZaiDFlv4r7RntTlycA87lJGfK3aUvzuUkZ8rdpS2C1o8y4Cl7eUBHXAwTALoMpxDDEoky5gX_CaXYWwbpz&_nc_ohc=Zzt6kLs6FRoQ7kNvwGxvLQm&_nc_oc=AdnUwfTX4N4YNudguPFiCmlLvA7clyCduDEsBwb8tLtMqJrxm49QqicCR4wDEqsvJt0&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=trBpnlHCc0-SBmO7DtIF4w&oh=00_Afc3dO8uouln0hmagkPIMJR6lrlnHWKlv6HZYo2mQapIEg&oe=68FBC363", text: "" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/472783800_628528916263108_2110443009505492361_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHyBVk7DppaCdXyQHyLnvG-otCR9D7YIP-i0JH0Ptgg_13I6dtT2yDpQ23WjEBppqp_8HzbxGvt92tOVor4CYTG&_nc_ohc=P4C300wT4HgQ7kNvwE8G63I&_nc_oc=AdkawbSspwR4bI8W6fXDUs38CTuq3LIxEtD8CiS10zQ658bAXiyDq763dDXmpWU8ba0&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=UR17ec2iMBmV2n0dWV0otw&oh=00_AffgMpPoJvorCoAMI-ZC-cuPY0Vea8da22M6WcQMYAb7kQ&oe=68FBDFA8", text: "" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/506084532_740254408423891_1616422172357892239_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHRL1F2VdUAI1p_ekhILtiGKTqs2rXpKyIpOqzatekrImVfdX9fmGVXvIlagnmmv72Sv_nvGJdbc1buAqcXSIWs&_nc_ohc=Hr6jk-qj8gYQ7kNvwHusGiE&_nc_oc=AdkcaK9qqZ2zQiOLhiRRBY_XtriGIQZKOxJpD2oFdx7Jdybv4TS4k4AN178U8fddHDY&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=OIuv4D1TUL5PG-jwc6R_TA&oh=00_AfeH2ICWkY0A4POIXfmiXZY5flnmagcl3FIY7SuiP8u19A&oe=68FBBB79", text: "Đĩ nhất nhà!" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/491405939_9232158180246473_4563796227225013811_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=86c6b0&_nc_eui2=AeFyCXscUSgR19ZfwB-w2bxNPMGVLk9ixpo8wZUuT2LGmvQCXYC6m7zjdMF_yLHJ70e2jTvLNBKFHbZjnRF9dJmU&_nc_ohc=tsqY8pSwKkQQ7kNvwFOk_Vj&_nc_oc=AdmzKtG6esxc6EPI0nKK8qacqziCI2OPi4puI32rHAZYqUUzTajPeQ-JCEwrQicinYc&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=viKaMg9bD4z2EmsveeNPSQ&oh=00_AfdTh4NoDuQzuZVzO8JEtUTNMqDoBrcvXLnzT2Cj67Qdkg&oe=68FBBF65", text: "Ả này cũng đĩ" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/545435487_24128728950162818_5469192198487199300_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGcr2ymvYgG-zgSL02BhGx27ECp2zU9i8XsQKnbNT2Lxau0WT4jT9rCPNBuW6wn-2FsSCHrW0Cru5g9Y61yhTdt&_nc_ohc=GMbmLPHir4gQ7kNvwHftNTO&_nc_oc=Adk4fVgGkv45FQFOgmsoAEuILKJt96A6_zeVCiWOWOW-skvrHmoqjuk0Rl-7y5BQ_Xw&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=KlGcFG-oKMtd95cs91Qfnw&oh=00_Afd8H1R2XNSNK7x0vxJt6A2LB0GCX0VPPkNGnJD8Q78m0Q&oe=68FBB954", text: "Ả này không kém gì 2 ả kia" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/491954048_9232816890180602_4615474422576925164_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFbSqZWBwF0_hC4QNVq8HgnT0j2zHThWA1PSPbMdOFYDYFOLrw8JzOhEyw3drIKIuNUznWHeITw3626l1c5y2MI&_nc_ohc=5_IC_xrQvOIQ7kNvwEBQY7k&_nc_oc=Admh3rs1diinyhoDx6zCkvusnOlEdBOZNJCl0m7U1IVNOLo3rAt8e9w6xB42E9P3xNw&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=rL_3xfVr6CN2p7zd5Dva9w&oh=00_AfeRCqqy_eMmKxA1T_E_XLtjn5lzm6ncv0TND5RAu2dDDA&oe=68FBDE33", text: "" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/481217134_661183319664334_7451728530650708199_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHPVxF2AIbl0DneWGPTT6Znn7MeX671U4qfsx5frvVTimAsHvcwG-pNfluea1LyX9UfIpYNC7O4TW_ao0HcBip9&_nc_ohc=hZcNWWBQel8Q7kNvwHFaEkZ&_nc_oc=Adl35A78terOq5TZjXPIQFO47EoNOUURy6Rq9dNTn6b0ciHSQgFeKRAF5dyfSzJ-HKA&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=JySI5K--9696TIevtoMT5w&oh=00_AfcFsZL9F0r3AkPxKBmBoFMRWSgy62TtEBBAbwIzGLk_yw&oe=68FBDEC9", text: "" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/503095518_740254255090573_5885795662128107705_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGcyZjUy_3JmD-2AaU3tWosqDUOP4iw1ZuoNQ4_iLDVmy6fJwsv1J4bRuziCKG9JguFc9udvPcCSklZyLoRWMfq&_nc_ohc=w6z9S0ahlc8Q7kNvwHTiVBj&_nc_oc=AdmnWpgy8NRyWonec3ls78bspkhT_9s5S2cNQGL5huG7bLYjEWEHigFIYzCo4cXZ_5Q&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=I69FtJJUtrvfNIA5v5o8Ng&oh=00_Afc40mZaPHRa_0a-KegjRqPMgijEhCCEVCWNUSgVeOJ0tA&oe=68FBCC47", text: "" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/489459926_9186771138118511_5616484732054712112_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGN_W7-fYHFjZKwjXjllgFPE-NqKfFNYEQT42op8U1gRGsq1ye_zgZY6qsHAsTRzE-Xk7QMl_X-FdWPhP9exzyY&_nc_ohc=EBzgkkMKb0sQ7kNvwEJAm-b&_nc_oc=AdkJXRG-Km4PE6iF4pKx1ggkyJ8xuwynpLyUXUdAv0G7shwwc2uSuoBqAErMcdgg12w&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=sIJZUq04OwEG6sYY8unLgw&oh=00_Afe7g7Q0GViXbK24Jk2MY7MAOp83i0D0xSGNiWpjD2jXGQ&oe=68FBBC70", text: "" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/487823681_9135036486625310_4889293484673121813_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGxXpQn9Mej2ZkyuDgsr446h-AiOnewO8yH4CI6d7A7zIoqMJX2__rUiGP57Z7_1NfsXWI3oZDtNAul2qbki9vg&_nc_ohc=JOsUnzkRgFkQ7kNvwGZUMI1&_nc_oc=Adm9Qn8F-Ugxs_8BNIaTDFQFKPaPGS2eHYI3oBzJQ2v3IwyYGlPfhVkkGWPl4MKZlvU&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=zMYR4xy9clQA6WG990Agcg&oh=00_AfdNn5DOtbdE_gwe-Wgm1NWsWuplFb2Uo2nwEZlCJtNnAw&oe=68FBB90F", text: "Con ba Mỏ mẹ Dung đẹp gái è" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/486666253_9095123117283314_4015409874201396050_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHKzi8hhh5RB1CGp6sl5QQzXQr2hSC5hJFdCvaFILmEkWIjIoYvISwlL7tabWReCIPU8pwRX5rvZ64T-mGo6xTT&_nc_ohc=FWZD03LLqHUQ7kNvwFsCAat&_nc_oc=AdkZYFCfMtKWl4EOM_yrsjKaqC3lYVAuLPJQjOk2JGQObsWMwHSffbOX1Bd2KDNzW5c&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=o9YMGU4SJMVqYKiGbBwhDQ&oh=00_Afd1MtTulowCt2MpiMirbvJaND5moleqBcwjoLJ29x4lHg&oe=68FBBB7E", text: "Tưởng o nào" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/484647192_9041733139288979_8824215474853448400_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHHmKCzvLCR1CzG8Q7nxous2jjqDU-4-0zaOOoNT7j7TAwwDvFHLuTVzzaFzRQWv36LiSwsi1MEwHleAXINUYOD&_nc_ohc=JMnwA8Tx9yEQ7kNvwGWPNlU&_nc_oc=AdnTE6iM6vYlLPqnlL3zi4SRViHYOrRuEOn7yepkpCjzdOltXS9RSwsDYdP8bhM6P20&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=ccIotODFDLJas3eY2b93-w&oh=00_Afe-qklalUAFb5WMyeru3u3KbR5a83ufzYvRM6c1tCQXVQ&oe=68FBCFBF", text: "" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/484751877_9041733129288980_7123794333565592570_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGEKmwMfzi324vi7VXMitWA_xgr3b9xecL_GCvdv3F5wjQyEr5-IcjjLMf6TbgLVBYqQIyGtqmgnZcDuow0R9Ar&_nc_ohc=Zfhvv8AGT5QQ7kNvwE6U7-y&_nc_oc=AdnA3MsXOppGcJL8m1lY5B_drvKYHvwpSKHW5TpLp_xkdUr4bclpgH_e1ftqrCB0YZQ&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=0bKG-53MMId_VQ_4EnH1Pg&oh=00_AfdogDGe6E_w-FA7laFVNB1yvTlYpfj-3hkbpzBpq5lxVw&oe=68FBDA21", text: "" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/484486469_675501151565884_1392778365799230844_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGbADUICdlOf-CqY3v8XDNgeT9-I2THsBR5P34jZMewFDERkj_M0Z--1DdIB2aNzMp-4uuCP36TUKgyFtuc1mvB&_nc_ohc=suKucgPVMRMQ7kNvwEXSdYu&_nc_oc=AdlZUP1Pxg-MjcWKTa6zrIqxuuOCn4JpsLisBZCWDOYZfcg5fhD49_u4r0h3S9nJdWM&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=YxmhXwQUgnMJurkCPNWwJg&oh=00_AfcuutJzBlImtVNArW0jYO55YCh9NFUa6hTdmDfRihM9Pg&oe=68FBC3A5", text: "2 chị em nhà mình cũng đẹp è Bé è" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/481775545_666630672452932_4808743456714942976_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHFOtUETdrGsKzYF77uha91ZhljJ9p5d0RmGWMn2nl3RCOwMoR2xVNhydwgyjTwh64l5gOQCEIlD1XL_1Kghyq7&_nc_ohc=nSSdbEHWUgcQ7kNvwEXW9mv&_nc_oc=AdmWCDeyx-47JDqpe909n-apWDWZynEE4fhukA3g5BltpH3vqf9dwVzfYoT27YzIO9g&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=Ii1b7DMEQj1_zZSU4AeTNA&oh=00_AfeMTNLfmXPecmbe0K3R_oIc2Tv95NekXa_mJTFjozwh9A&oe=68FBB233", text: "" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/492888537_9282873375174953_927890999229344544_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGNJ0wX2KDrVwjz4dVDrB9RMlsQeQHehsIyWxB5Ad6GwvTRoeE9BI_jcZsDwai-P828ZDeQOXtb2fYoUqGTy8yd&_nc_ohc=p2gPRQBbiJsQ7kNvwEJqjaV&_nc_oc=AdkwUH3WzFU6Pp70vQhA0iorCdk6kxHSAjNiNzeplcJxtNI5ICixapTAf45dRvSj8FM&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=jaRru-87eQh7QblwTwyCqA&oh=00_AfeeI4Q9fqkQHU4ZnmpW9Wm38w1jw770KqbDNVivWM4J6Q&oe=68FBDB33", text: "!!!" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/489673496_9182825401846418_6249185978283462548_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeGFSlIb786nI9qBE3d-p8RJ8ZX6kbmysnPxlfqRubKyc3kaHHl3FzLCYSDxpyW8q8BMk474RUYK8iJYb6w0Cun7&_nc_ohc=ROCKUNf7wKEQ7kNvwFbHU4B&_nc_oc=AdmHQaK_ixWn9tJzh88IYwd-rAX7KrQfKlMu7Zty9r6yXai2-EYKa1MV9vtylEay0-E&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=fM34qIwX-4yeLi8EaYiOYg&oh=00_AfeVMOOFo1bqWYXYtM1B3jdo-WD8FZjf0Wkn8i3Yo2HqbA&oe=68FBC8BB", text: "Chíp kiểu: Với những tình huống khó xử như thế này, chỉ cần nở một nụ cười tự tin" }, { img: "https://scontent.fsgn19-1.fna.fbcdn.net/v/t39.30808-6/481660335_661185422997457_6525918769928506108_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeH1om67ZOgwQKwOCAyexxDydOkpGqN5JLd06Skao3kkt6sP59JxnT_psMRSdN1x2u5c1W8rrta5iFy7Woc9Rl5f&_nc_ohc=qleuV_n96oQQ7kNvwE-xzFm&_nc_oc=AdkIjGQqn05CDCyd4yHdPzQjBzZPQR32zJKMqvEWclk63ZJzLMYBXoHYh8YINY_Hc3s&_nc_zt=23&_nc_ht=scontent.fsgn19-1.fna&_nc_gid=TG-PqX0uCN1mKvjhbYpm4A&oh=00_Afe7WUBuVHSSYF4MATNIp0owWBcBa0ffyg0PttXIKZ5-QA&oe=68FBD571", text: "Con yêu cả nhà ❤️❤️❤️" },];
+
+        const bookEl = document.getElementById('book');
+        for (let i = 0; i < pagesData.length; i++) {
+            const data = pagesData[i];
+            const page = document.createElement('div');
+            page.className = 'page';
+            const deco = document.createElement('div');
+            deco.className = 'flower-decoration flower-top-left';
+            deco.textContent = '🌺';
+            page.appendChild(deco);
+            const content = document.createElement('div');
+            content.className = 'page-content';
+            if (data.img) {
+                const img = document.createElement('img');
+                img.src = data.img;
+                content.appendChild(img);
+            }
+            const p = document.createElement('p');
+            p.textContent = data.text;
+            content.appendChild(p);
+            page.appendChild(content);
+            bookEl.appendChild(page);
+        }
+
+        // Khởi tạo PageFlip
+        const isMobile = window.innerWidth < 768;
+        const pageFlip = new St.PageFlip(document.getElementById('book'), {
+            width: isMobile ? window.innerWidth * 0.8 : window.innerWidth * 0.4,
+            height: window.innerHeight * 0.8,
+            size: "fixed",
+            showCover: false,
+            mobileScrollSupport: true,
+            drawShadow: true,
+            flippingTime: 1000,
+            usePortrait: isMobile,
+            maxShadowOpacity: 0.5
+        });
+        pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+        document.getElementById('prev').addEventListener('click', () => pageFlip.flipPrev());
+        document.getElementById('next').addEventListener('click', () => pageFlip.flipNext());
+
+        // ---------------------------
+        // YouTube hidden player (autoplay attempt; will resume on user interaction if blocked)
+        // ---------------------------
+
+        // Replace with your desired YouTube ID
+        const YT_VIDEO_ID = '4P0R9dUJ370';
+
+        // load IFrame API
+        (function loadYouTubeAPI() {
+            const tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            const firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        })();
+
+        // hold reference to player
+        let ytPlayer = null;
+
+        // called by YouTube API when ready
+        function onYouTubeIframeAPIReady() {
+            // origin param helps with some browser policies
+            const origin = window.location.origin || (window.location.protocol + '//' + window.location.hostname);
+            ytPlayer = new YT.Player('yt-player', {
+                height: '0',
+                width: '0',
+                videoId: YT_VIDEO_ID,
+                playerVars: {
+                    autoplay: 1,
+                    controls: 0,
+                    loop: 1,
+                    playlist: YT_VIDEO_ID,
+                    modestbranding: 1,
+                    rel: 0,
+                    iv_load_policy: 3,
+                    origin: origin
+                },
+                events: {
+                    onReady: (e) => {
+                        // try to play immediately
+                        tryPlayYT();
+                    },
+                    onError: (e) => {
+                        console.warn('YouTube player error', e);
+                    }
+                }
+            });
+        }
+
+        function tryPlayYT() {
+            if (!ytPlayer) return;
+            try {
+                // attempt to play - browsers may block if no user interaction
+                ytPlayer.playVideo();
+            } catch (err) {
+                // ignore - will attempt after interaction
+                // console.warn('YT play attempt failed', err);
+            }
+        }
+
+        // If autoplay blocked, resume on first user interaction (pointerdown / touchstart / keydown)
+        function resumeYTOnInteraction() {
+            if (!ytPlayer) return;
+            try {
+                ytPlayer.playVideo();
+            } catch (e) {
+                // some browsers still block, but this usually works after user action
+            }
+            window.removeEventListener('pointerdown', resumeYTOnInteraction);
+            window.removeEventListener('touchstart', resumeYTOnInteraction);
+            window.removeEventListener('keydown', resumeYTOnInteraction);
+        }
+
+        window.addEventListener('pointerdown', resumeYTOnInteraction, { passive: true });
+        window.addEventListener('touchstart', resumeYTOnInteraction, { passive: true });
+        window.addEventListener('keydown', resumeYTOnInteraction, { passive: true });
+
+        // ---------------------------
+        // PETALS (hoa anh đào rơi) - ít và nhẹ
+        // ---------------------------
+        const petalsContainer = document.getElementById('petals');
+
+        // số lượng petal cùng lúc (khởi tạo)
+        const PETAL_COUNT = 10;
+
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            // dùng emoji (nhẹ); nếu muốn dùng ảnh png thay innerHTML bằng <img ...>
+            petal.innerHTML = '🌸';
+
+            // random vị trí ngang bắt đầu (0-100 vw)
+            const startLeft = Math.random() * 100;
+            petal.style.left = `${startLeft}vw`;
+
+            // random kích thước (nhỏ hơn)
+            const size = 12 + Math.random() * 30; // 12px - ~42px
+            petal.style.fontSize = `${size}px`;
+
+            // random duration rơi
+            const duration = 7 + Math.random() * 8; // 7s - 15s
+
+            // random animation direction (left / right)
+            const useLeft = Math.random() > 0.5;
+
+            // animation delay (để rơi rải)
+            const delay = Math.random() * 4; // 0 - 4s
+
+            // áp dụng animation bằng inline style
+            petal.style.animation = `${useLeft ? 'fall-left' : 'fall'} ${duration}s linear ${delay}s forwards`;
+
+            petal.style.opacity = (0.6 + Math.random() * 0.35).toFixed(2);
+
+            // random z-index depth (mô phỏng gần / xa) - đảm bảo rơi qua sách
+            const z = Math.floor(Math.random() * 30);
+            petal.style.zIndex = z + 20;
+
+            // thêm blur nhẹ nếu ở sâu
+            if (z < 8) petal.classList.add('depth-blur');
+
+            // khi animation kết thúc, remove element để giải phóng DOM
+            petal.addEventListener('animationend', () => {
+                petal.remove();
+                // tạo thêm petal mới để duy trì dòng rơi (spawn chậm hơn)
+                setTimeout(() => spawnPetal(), 1000 + Math.random() * 3000);
+            });
+
+            return petal;
+        }
+
+        function spawnPetal() {
+            const petal = createPetal();
+            petalsContainer.appendChild(petal);
+        }
+
+        // Khởi tạo một số petal ban đầu (stagger)
+        for (let i = 0; i < PETAL_COUNT; i++) {
+            setTimeout(spawnPetal, Math.random() * 3000);
+        }
+
+        // Helpers to control petals if needed (console)
+        window.stopPetals = function () {
+            const nodes = petalsContainer.querySelectorAll('.petal');
+            nodes.forEach(n => n.remove());
+        };
+        window.startPetals = function (count = PETAL_COUNT) {
+            for (let i = 0; i < count; i++) setTimeout(spawnPetal, Math.random() * 3000);
+        };
+
+        // End of script
+    </script>
+</body>
+
+</html>
